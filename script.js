@@ -4,22 +4,22 @@
 
 // --- Descriptions MBTI ---
 const mbtiData = {
-    "ISTJ": { name: "Le Logisticien", desc: "Pragmatique et factuel, la fiabilité incarnée.", famous: "Hermione Granger, Sting, Denzel Washington, George Washington" },
-    "ISFJ": { name: "Le Défenseur", desc: "Dévoué et chaleureux, toujours prêt à protéger ceux qu'il aime.", famous: "Captain America, Beyoncé, Reine Elizabeth II, Vin Diesel" },
-    "INFJ": { name: "L'Avocat", desc: "Calme et mystique, mais très inspirant et idéaliste.", famous: "Gandalf, Martin Luther King, Lady Gaga, Aragorn" },
-    "INTJ": { name: "L'Architecte", desc: "Un penseur imaginatif et stratège, avec un plan pour tout.", famous: "Elon Musk, Walter White, Christopher Nolan, Michelle Obama" },
-    "ISTP": { name: "Le Virtuose", desc: "Audacieux et pratique, maître de tous les outils.", famous: "James Bond, Indiana Jones, Tom Cruise, Michael Jordan" },
-    "ISFP": { name: "L'Aventurier", desc: "Un artiste flexible et charmant, toujours prêt à explorer.", famous: "Michael Jackson, Harry Potter, Frida Kahlo, Rihanna" },
-    "INFP": { name: "Le Médiateur", desc: "Poétique, gentil et altruiste, toujours désireux d'aider.", famous: "Frodon Sacquet, William Shakespeare, Johnny Depp, Björk" },
-    "INTP": { name: "Le Logicien", desc: "Un inventeur innovant avec une soif inétanchable de connaissances.", famous: "Albert Einstein, Bill Gates, Neo (Matrix), Descartes" },
-    "ESTP": { name: "L'Entrepreneur", desc: "Intelligent, énergique et très perspicace.", famous: "Madonna, Ernest Hemingway, Rocket Raccoon, Eddie Murphy" },
-    "ESFP": { name: "L'Amuseur", desc: "Spontané, énergique et enthousiaste, la vie n'est jamais ennuyeuse.", famous: "Marilyn Monroe, Elvis Presley, Miley Cyrus, Will Smith" },
-    "ENFP": { name: "L'Inspirateur", desc: "Enthousiaste, créatif et sociable, un esprit libre.", famous: "Robert Downey Jr., Spider-Man, Robin Williams, Walt Disney" },
-    "ENTP": { name: "L'Innovateur", desc: "Astucieux et curieux, il ne résiste pas à un défi intellectuel.", famous: "Joker, Captain Jack Sparrow, Thomas Edison, Céline Dion" },
-    "ESTJ": { name: "Le Directeur", desc: "Un excellent administrateur, inégalé dans la gestion des choses.", famous: "Boromir, Juge Judy, Frank Sinatra, Dwight Schrute" },
-    "ESFJ": { name: "Le Consul", desc: "Extraordinairement attentionné, social et populaire.", famous: "Taylor Swift, Jennifer Lopez, Bob l'Éponge, Monica Geller" },
+    "ISTJ": { name: "Le Logisticien", desc: "Pragmatique et factuel, la fiabilité incarnée.", famous: "Hermione Granger, Sting, Denzel Washington, George Washington, Machine Connor" },
+    "ISFJ": { name: "Le Défenseur", desc: "Dévoué et chaleureux, toujours prêt à protéger ceux qu'il aime.", famous: "Captain America, Beyoncé, Reine Elizabeth II, Vin Diesel, Marge Simpson" },
+    "INFJ": { name: "L'Avocat", desc: "Calme et mystique, mais très inspirant et idéaliste.", famous: "Gandalf, Martin Luther King, Lady Gaga, Aragorn, Johan Liebert" },
+    "INTJ": { name: "L'Architecte", desc: "Un penseur imaginatif et stratège, avec un plan pour tout.", famous: "Elon Musk, Walter White, Christopher Nolan, Michelle Obama, Nikola Tesla" },
+    "ISTP": { name: "Le Virtuose", desc: "Audacieux et pratique, maître de tous les outils.", famous: "James Bond, Indiana Jones, Tom Cruise, Michael Jordan, Eminem" },
+    "ISFP": { name: "L'Aventurier", desc: "Un artiste flexible et charmant, toujours prêt à explorer.", famous: "Michael Jackson, Harry Potter, Frida Kahlo, Rihanna, messi" },
+    "INFP": { name: "Le Médiateur", desc: "Poétique, gentil et altruiste, toujours désireux d'aider.", famous: "Frodon Sacquet, William Shakespeare, Johnny Depp, Björk, legoshi, Björn Andrésen" },
+    "INTP": { name: "Le Logicien", desc: "Un inventeur innovant avec une soif inétanchable de connaissances.", famous: "Albert Einstein, Bill Gates, Neo (Matrix), Descartes, " },
+    "ESTP": { name: "L'Entrepreneur", desc: "Intelligent, énergique et très perspicace.", famous: "Madonna, Ernest Hemingway, Rocket Raccoon, Eddie Murphy, Hank Schrader, Durham" },
+    "ESFP": { name: "L'Amuseur", desc: "Spontané, énergique et enthousiaste, la vie n'est jamais ennuyeuse.", famous: "Marilyn Monroe, Elvis Presley, Miley Cyrus, Will Smith, Jesse Pinkman" },
+    "ENFP": { name: "L'Inspirateur", desc: "Enthousiaste, créatif et sociable, un esprit libre.", famous: "Robert Downey Jr., Spider-Man, Robin Williams, Walt Disney, Michael Scott" },
+    "ENTP": { name: "L'Innovateur", desc: "Astucieux et curieux, il ne résiste pas à un défi intellectuel.", famous: "Joker, Captain Jack Sparrow, Thomas Edison, Céline Dion, BoJack F. Horseman" },
+    "ESTJ": { name: "Le Directeur", desc: "Un excellent administrateur, inégalé dans la gestion des choses.", famous: "Boromir, Juge Judy, Frank Sinatra, Dwight Schrute, " },
+    "ESFJ": { name: "Le Consul", desc: "Extraordinairement attentionné, social et populaire.", famous: "Taylor Swift, Jennifer Lopez, Bob l'Éponge, Monica Geller, jack (beastars)" },
     "ENFJ": { name: "Le Protagoniste", desc: "Un leader charismatique et inspirant, capable de captiver son public.", famous: "Barack Obama, Oprah Winfrey, Morpheus, Daenerys Targaryen" },
-    "ENTJ": { name: "Le Commandant", desc: "Un leader audacieux, imaginatif et volontaire.", famous: "Steve Jobs, Gordon Ramsay, Napoléon Bonaparte, Jules César" }
+    "ENTJ": { name: "Le Commandant", desc: "Un leader audacieux, imaginatif et volontaire.", famous: "Steve Jobs, Gordon Ramsay, Napoléon Bonaparte, Jules César, louis (beastars)" }
 };
 
 // --- Descriptions Ennéagramme ---
