@@ -849,3 +849,62 @@ footer {
 main {
     padding-bottom: 40px; 
 }
+
+/* =========================================
+   VERSION MOBILE (RESPONSIVE)
+   ========================================= */
+
+@media (max-width: 768px) {
+    
+    /* 1. On réduit les marges latérales énormes */
+    .container {
+        padding: 0 20px; /* On passe de 70px à 20px */
+    }
+
+    /* 2. On réduit la taille du gros titre */
+    header h1 {
+        font-size: 2rem; /* Plus petit pour ne pas déborder */
+        line-height: 1.2;
+    }
+
+    header {
+        padding: 40px 0; /* Moins de vide en haut */
+        clip-path: none; /* On enlève la coupe en biais qui peut gêner sur mobile */
+    }
+
+    /* 3. On empile les boutons Oui/Non verticalement */
+    .options {
+        flex-direction: column; /* Les boutons passent l'un sous l'autre */
+        gap: 10px;
+    }
+
+    .btn-option {
+        width: 100%; /* Ils prennent toute la largeur */
+        margin: 0;
+    }
+
+    /* 4. On ajuste la boîte de quiz */
+    .quiz-box {
+        margin: 40px auto; /* On remonte la boîte (fini les 180px de vide !) */
+        padding: 20px; /* Moins de rembourrage interne */
+        width: 100%;
+    }
+
+    /* 5. Le Footer prend toute la largeur */
+    footer {
+        width: 100%;
+        border-radius: 0;
+        border: none;
+        padding: 30px 20px;
+    }
+
+    /* 6. Ajustement des grilles */
+    .cards-grid, .mbti-grid, .ennea-duo {
+        grid-template-columns: 1fr; /* 1 seule colonne partout */
+    }
+
+    /* 7. Ajustement des textes */
+    .intro-text {
+        font-size: 1rem;
+    }
+}
