@@ -21,7 +21,6 @@ const mbtiData = {
     "ENFJ": { name: "Le Protagoniste", desc: "Un leader charismatique et inspirant, capable de captiver son public.", famous: "Barack Obama, Oprah Winfrey, Morpheus, Daenerys Targaryen" },
     "ENTJ": { name: "Le Commandant", desc: "Un leader audacieux, imaginatif et volontaire.", famous: "Steve Jobs, Gordon Ramsay, Napoléon Bonaparte, Jules César, louis (beastars)" }
 };
-
 // --- Descriptions Ennéagramme ---
 const enneaData = {
     1: { name: "Type 1 : Le Réformateur", tags: "Rigueur • Idéal", desc: "Vise la perfection et redoute l'erreur.", passion: "Passion : Colère", virtue: "Vertu : Sérénité", pdesc: "Irritation face à l'imperfection.", vdesc: "Accepter le monde tel qu'il est." },
@@ -167,7 +166,7 @@ const oceanQuestions = [
 let currentQuestionIndex = 0;
 let mbtiScores = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
 let enneaScores = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
-let oceanScores = { O: 0, C: 0, E: 0, A: 0, N: 0 }; // Scores pour OCEAN
+let oceanScores = { O: 0, C: 0, E: 0, A: 0, N: 0 };
 let activeQuiz = null; // 'mbti', 'ennea', ou 'ocean'
 let myChart = null; // Stocke l'instance du graphique Chart.js
 
@@ -224,15 +223,22 @@ function showQuestion() {
     
     // Mise à jour du texte
     const questionTextEl = document.getElementById('question-text');
-    questionTextEl.classList.remove('fade-in'); // Reset anim
-    void questionTextEl.offsetWidth; // Trigger reflow
-    questionTextEl.textContent = q.text;
-    questionTextEl.classList.add('fade-in');
+    if (questionTextEl) {
+        questionTextEl.classList.remove('fade-in'); 
+        void questionTextEl.offsetWidth; // Trigger reflow
+        questionTextEl.textContent = q.text;
+        questionTextEl.classList.add('fade-in');
+    }
 
     // Mise à jour barre progression
-    const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
-    document.getElementById('progress-bar').style.width = `${progress}%`;
-    document.getElementById('progress-text').textContent = `Question ${currentQuestionIndex + 1} / ${questions.length}`;
+    const progressEl = document.getElementById('progress-bar');
+    const progressTextEl = document.getElementById('progress-text');
+    
+    if (progressEl && progressTextEl) {
+        const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+        progressEl.style.width = `${progress}%`;
+        progressTextEl.textContent = `Question ${currentQuestionIndex + 1} / ${questions.length}`;
+    }
 }
 
 function answerQuestion(agreement) {
@@ -244,7 +250,7 @@ function answerQuestion(agreement) {
     const q = questions[currentQuestionIndex];
 
     if (activeQuiz === 'mbti') {
-        // Logique MBTI : Si Oui -> Target, Si Non -> Opposé
+        // Logique MBTI
         const pairs = { 'E':'I', 'I':'E', 'S':'N', 'N':'S', 'T':'F', 'F':'T', 'J':'P', 'P':'J' };
         if (agreement === 'yes') {
             mbtiScores[q.target]++;
@@ -252,12 +258,12 @@ function answerQuestion(agreement) {
             mbtiScores[pairs[q.target]]++;
         }
     } else if (activeQuiz === 'ennea') {
-        // Logique Ennéagramme : Si Oui -> +1 au type
+        // Logique Ennéagramme
         if (agreement === 'yes') {
             enneaScores[q.target]++;
         }
     } else if (activeQuiz === 'ocean') {
-        // Logique OCEAN : Si Oui -> +1 au trait
+        // Logique OCEAN
         if (agreement === 'yes') {
             oceanScores[q.target]++;
         }
@@ -284,7 +290,7 @@ function showResult() {
     let dataValues = [];
     let backgroundColors = [];
 
-    // Fonctions d'aide pour éviter les crashs si l'élément n'existe pas dans le HTML
+    // Fonctions d'aide
     const safeSetText = (id, text) => {
         const el = document.getElementById(id);
         if (el) el.textContent = text;
@@ -297,7 +303,6 @@ function showResult() {
 
     // --- BRANCHE MBTI ---
     if (activeQuiz === 'mbti') {
-        // 1. Calcul du type (ex: INTJ)
         const type = (mbtiScores.E >= mbtiScores.I ? "E" : "I") + 
                      (mbtiScores.S >= mbtiScores.N ? "S" : "N") + 
                      (mbtiScores.T >= mbtiScores.F ? "T" : "F") + 
@@ -305,7 +310,6 @@ function showResult() {
 
         safeSetText('final-type', type);
 
-        // 2. Affichage Description & Star System
         if (mbtiData[type]) {
             const profile = mbtiData[type];
             let starHtml = '';
@@ -328,12 +332,10 @@ function showResult() {
             safeSetText('final-desc', "Profil déterminé.");
         }
 
-        // 3. Données Graphique
         labels = ['Extraversion', 'Introversion', 'Sensation', 'Intuition', 'Pensée', 'Sentiment', 'Jugement', 'Perception'];
         dataValues = [mbtiScores.E, mbtiScores.I, mbtiScores.S, mbtiScores.N, mbtiScores.T, mbtiScores.F, mbtiScores.J, mbtiScores.P];
         backgroundColors = ['#FF6384', '#FF6384', '#36A2EB', '#36A2EB', '#FFCE56', '#FFCE56', '#4BC0C0', '#4BC0C0'];
 
-        // 4. Scores Texte
         const scoresDisplay = document.getElementById('scores-display');
         if (scoresDisplay) {
             scoresDisplay.innerHTML = `
@@ -342,9 +344,9 @@ function showResult() {
             `;
         }
     } 
-    // --- BRANCHE ENNÉAGRAMME (Mise à jour avec Ailes) ---
+    // --- BRANCHE ENNÉAGRAMME (Avec Ailes) ---
     else if (activeQuiz === 'ennea') {
-        // 1. Trouver le Type Dominant (Celui avec le plus grand score)
+        // 1. Trouver le Type Dominant
         let dominantType = 1;
         let maxScore = -1;
 
@@ -356,8 +358,6 @@ function showResult() {
         }
 
         // 2. Calculer l'Aile (Wing)
-        // Les voisins sur le cercle : 
-        // Si 1 -> voisins 9 et 2. Si 9 -> voisins 8 et 1. Sinon -> type-1 et type+1.
         let wing1 = (dominantType === 1) ? 9 : dominantType - 1;
         let wing2 = (dominantType === 9) ? 1 : dominantType + 1;
 
@@ -367,7 +367,6 @@ function showResult() {
         // On compare les scores des deux voisins
         let wing = (scoreW1 >= scoreW2) ? wing1 : wing2;
 
-        // Création du résultat final (ex: "9w1")
         let finalResult = `${dominantType}w${wing}`;
 
         // 3. Affichage
@@ -391,11 +390,10 @@ function showResult() {
             `);
         }
 
-        // Configuration du Graphique (inchangé, mais on s'assure que les labels sont bons)
         labels = ['Type 1', 'Type 2', 'Type 3', 'Type 4', 'Type 5', 'Type 6', 'Type 7', 'Type 8', 'Type 9'];
         dataValues = [enneaScores[1], enneaScores[2], enneaScores[3], enneaScores[4], enneaScores[5], enneaScores[6], enneaScores[7], enneaScores[8], enneaScores[9]];
         
-        // On met en surbrillance la barre du dominant et de l'aile
+        // Couleurs graphiques (Dominant et Aile en surbrillance)
         backgroundColors = labels.map((_, i) => {
             if (i + 1 === dominantType) return '#e056fd'; // Couleur principale
             if (i + 1 === wing) return '#bd34eb'; // Couleur aile (un peu plus foncée)
@@ -405,12 +403,8 @@ function showResult() {
 
     // --- BRANCHE OCEAN ---
     else if (activeQuiz === 'ocean') {
-        // Pas besoin de définir final-type/final-desc pour OCEAN car ils ne sont pas dans le HTML spécifique
-        // Mais si tu les rajoutes un jour, ces lignes sont sécurisées :
         safeSetText('final-type', "Profil Big Five");
-        safeSetText('final-desc', "Voici la répartition de vos 5 grands traits.");
-
-        // Calcul des % (5 questions par trait)
+        
         labels = ['Ouverture', 'Conscience', 'Extraversion', 'Agréabilité', 'Névrosisme'];
         dataValues = [
             (oceanScores.O / 5) * 100, 
@@ -421,7 +415,6 @@ function showResult() {
         ];
         backgroundColors = ['#4fc3f7', '#4dd0e1', '#4db6ac', '#81c784', '#aed581'];
 
-        // Affichage texte détaillé
         const detailsDiv = document.getElementById('ocean-details');
         if (detailsDiv) {
             let html = '';
@@ -446,17 +439,10 @@ function showResult() {
     // --- GÉNÉRATION DU GRAPHIQUE (Chart.js) ---
     const ctx = document.getElementById('resultChart');
     if (ctx) {
-        if (myChart) myChart.destroy(); // Nettoie l'ancien graphique
-
-        // Configuration adaptée selon le quiz
-        let chartType = 'bar';
-        if (activeQuiz === 'ocean') chartType = 'radar'; // Radar est souvent mieux pour OCEAN, mais bar marche aussi. Je laisse Bar pour cohérence.
-        
-        // Si tu veux un Radar pour OCEAN, décommente la ligne ci-dessous :
-        // if (activeQuiz === 'ocean') chartType = 'radar'; 
+        if (myChart) myChart.destroy();
 
         myChart = new Chart(ctx, {
-            type: 'bar', // Change à 'radar' si tu préfères pour OCEAN
+            type: 'bar',
             data: {
                 labels: labels,
                 datasets: [{
@@ -471,9 +457,8 @@ function showResult() {
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
-                    y: { beginAtZero: true, max: activeQuiz === 'ocean' ? 100 : undefined, display: activeQuiz !== 'ocean' }, 
-                    x: { grid: { display: false } },
-                    r: { suggestMin: 0, suggestMax: 100 } // Pour radar si utilisé
+                    y: { beginAtZero: true }, 
+                    x: { grid: { display: false } }
                 },
                 plugins: {
                     legend: { display: false }
@@ -489,29 +474,26 @@ function showResult() {
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    // 1. FORCE LE SCROLL EN HAUT 
+    // 1. FORCE LE SCROLL EN HAUT (Le fix magique ✨)
     if ('scrollRestoration' in history) {
         history.scrollRestoration = 'manual';
     }
     window.scrollTo(0, 0);
 
     // 2. Gestion des boutons Ennéagramme sur la page d'accueil (index.html)
-    // On vérifie d'abord s'ils existent pour éviter les erreurs sur les autres pages
     const typeButtons = document.querySelectorAll('.type-item');
     if (typeButtons.length > 0) {
         typeButtons.forEach(btn => {
             btn.addEventListener('click', () => {
-                // On enlève la classe 'active' de tous les boutons
                 typeButtons.forEach(b => b.classList.remove('active'));
-                // On l'ajoute sur celui cliqué
                 btn.classList.add('active');
-                // On affiche les détails correspondants
                 showEnneaDetails(btn.dataset.type);
             });
         });
     }
 
     // 3. Boutons "Commencer le Quiz" (Sur les pages test-*.html)
+    // On vérifie si le bouton existe avant d'ajouter l'écouteur (évite les erreurs null)
     const startMbti = document.getElementById('start-btn');
     if (startMbti) {
         startMbti.addEventListener('click', () => startQuiz('mbti'));
@@ -527,33 +509,22 @@ document.addEventListener('DOMContentLoaded', () => {
         startOcean.addEventListener('click', () => startQuiz('ocean'));
     }
 
-    // 4. Boutons de réponse (Oui / Non)
+    // 4. Boutons de réponse (Oui / Non) - Gère tous les quiz
     const optionButtons = document.querySelectorAll('.btn-option');
     if (optionButtons.length > 0) {
         optionButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const value = btn.getAttribute('data-value'); // Récupère 'yes' ou 'no'
-                answerQuestion(value);
+            btn.addEventListener('click', (e) => {
+                // Récupère 'yes' ou 'no'. Si on clique sur l'enfant (emoji), on remonte au parent.
+                let target = e.target;
+                if (!target.classList.contains('btn-option')) {
+                    target = target.closest('.btn-option');
+                }
+                
+                if (target) {
+                    const value = target.getAttribute('data-value'); 
+                    answerQuestion(value);
+                }
             });
         });
     }
-});
-
-    // 2. Boutons "Commencer"
-    const startMbti = document.getElementById('start-btn');
-    if (startMbti) startMbti.addEventListener('click', () => startQuiz('mbti'));
-
-    const startEnnea = document.getElementById('start-btn-ennea');
-    if (startEnnea) startEnnea.addEventListener('click', () => startQuiz('ennea'));
-
-    const startOcean = document.getElementById('start-btn-ocean');
-    if (startOcean) startOcean.addEventListener('click', () => startQuiz('ocean'));
-
-    // 3. Boutons de réponse (Oui / Non)
-    document.querySelectorAll('.btn-option').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const value = btn.getAttribute('data-value'); // 'yes' ou 'no'
-            answerQuestion(value);
-        });
-    });
 });
