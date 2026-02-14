@@ -483,15 +483,61 @@ function showResult() {
     }
 }
 
+// ==========================================
+// 6. INITIALISATION (AU CHARGEMENT DE LA PAGE)
+// ==========================================
+
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Gestion des boutons Ennéagramme sur la page d'accueil
-    document.querySelectorAll('.type-item').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.type-item').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            showEnneaDetails(btn.dataset.type);
+    
+    // 1. FORCE LE SCROLL EN HAUT 
+    if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+
+    // 2. Gestion des boutons Ennéagramme sur la page d'accueil (index.html)
+    // On vérifie d'abord s'ils existent pour éviter les erreurs sur les autres pages
+    const typeButtons = document.querySelectorAll('.type-item');
+    if (typeButtons.length > 0) {
+        typeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // On enlève la classe 'active' de tous les boutons
+                typeButtons.forEach(b => b.classList.remove('active'));
+                // On l'ajoute sur celui cliqué
+                btn.classList.add('active');
+                // On affiche les détails correspondants
+                showEnneaDetails(btn.dataset.type);
+            });
         });
-    });
+    }
+
+    // 3. Boutons "Commencer le Quiz" (Sur les pages test-*.html)
+    const startMbti = document.getElementById('start-btn');
+    if (startMbti) {
+        startMbti.addEventListener('click', () => startQuiz('mbti'));
+    }
+
+    const startEnnea = document.getElementById('start-btn-ennea');
+    if (startEnnea) {
+        startEnnea.addEventListener('click', () => startQuiz('ennea'));
+    }
+
+    const startOcean = document.getElementById('start-btn-ocean');
+    if (startOcean) {
+        startOcean.addEventListener('click', () => startQuiz('ocean'));
+    }
+
+    // 4. Boutons de réponse (Oui / Non)
+    const optionButtons = document.querySelectorAll('.btn-option');
+    if (optionButtons.length > 0) {
+        optionButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const value = btn.getAttribute('data-value'); // Récupère 'yes' ou 'no'
+                answerQuestion(value);
+            });
+        });
+    }
+});
 
     // 2. Boutons "Commencer"
     const startMbti = document.getElementById('start-btn');
