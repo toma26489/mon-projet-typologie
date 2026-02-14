@@ -342,31 +342,67 @@ function showResult() {
             `;
         }
     } 
-    // --- BRANCHE ENNÉAGRAMME ---
+    // --- BRANCHE ENNÉAGRAMME (Mise à jour avec Ailes) ---
     else if (activeQuiz === 'ennea') {
+        // 1. Trouver le Type Dominant (Celui avec le plus grand score)
+        let dominantType = 1;
         let maxScore = -1;
-        let winnerType = "Inconnu";
-        for (const [t, score] of Object.entries(enneaScores)) {
+
+        for (const [type, score] of Object.entries(enneaScores)) {
             if (score > maxScore) {
                 maxScore = score;
-                winnerType = t;
+                dominantType = parseInt(type);
             }
         }
 
-        safeSetText('final-type', "Type " + winnerType);
+        // 2. Calculer l'Aile (Wing)
+        // Les voisins sur le cercle : 
+        // Si 1 -> voisins 9 et 2. Si 9 -> voisins 8 et 1. Sinon -> type-1 et type+1.
+        let wing1 = (dominantType === 1) ? 9 : dominantType - 1;
+        let wing2 = (dominantType === 9) ? 1 : dominantType + 1;
+
+        let scoreW1 = enneaScores[wing1];
+        let scoreW2 = enneaScores[wing2];
+
+        // On compare les scores des deux voisins
+        let wing = (scoreW1 >= scoreW2) ? wing1 : wing2;
+
+        // Création du résultat final (ex: "9w1")
+        let finalResult = `${dominantType}w${wing}`;
+
+        // 3. Affichage
+        safeSetText('final-type', "Type " + finalResult);
         
-        if (enneaData[winnerType]) {
-            const profile = enneaData[winnerType];
+        if (enneaData[dominantType]) {
+            const profile = enneaData[dominantType];
+            const wingProfile = enneaData[wing];
+            
             safeSetHTML('final-desc', `
-                <strong style="font-size:1.4rem; color:#e056fd; display:block; margin-bottom:8px;">${profile.name}</strong>
-                <span style="font-style:italic; opacity:0.9;">"${profile.desc}"</span>
+                <strong style="font-size:1.4rem; color:#e056fd; display:block; margin-bottom:8px;">
+                    ${profile.name} (Aile ${wing})
+                </strong>
+                <span style="font-style:italic; opacity:0.9; display:block; margin-bottom:15px;">
+                    "${profile.desc}"
+                </span>
+                <div style="font-size:0.9rem; background:rgba(224, 86, 253, 0.1); padding:10px; border-radius:8px; margin-top:10px;">
+                    <strong>Influence de l'aile ${wing} :</strong><br>
+                    Vous empruntez des traits au <em>${wingProfile.name.split(':')[1]}</em>.
+                </div>
             `);
         }
 
+        // Configuration du Graphique (inchangé, mais on s'assure que les labels sont bons)
         labels = ['Type 1', 'Type 2', 'Type 3', 'Type 4', 'Type 5', 'Type 6', 'Type 7', 'Type 8', 'Type 9'];
         dataValues = [enneaScores[1], enneaScores[2], enneaScores[3], enneaScores[4], enneaScores[5], enneaScores[6], enneaScores[7], enneaScores[8], enneaScores[9]];
-        backgroundColors = '#e056fd'; 
+        
+        // On met en surbrillance la barre du dominant et de l'aile
+        backgroundColors = labels.map((_, i) => {
+            if (i + 1 === dominantType) return '#e056fd'; // Couleur principale
+            if (i + 1 === wing) return '#bd34eb'; // Couleur aile (un peu plus foncée)
+            return '#f3d9fa'; // Les autres en très clair
+        });
     }
+
     // --- BRANCHE OCEAN ---
     else if (activeQuiz === 'ocean') {
         // Pas besoin de définir final-type/final-desc pour OCEAN car ils ne sont pas dans le HTML spécifique
